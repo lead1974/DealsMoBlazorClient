@@ -21,11 +21,13 @@ namespace DealsMo.Shared.Entities
         public string DealTrailer { get; set; }
         [Required]
         public DateTime? ReleaseDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public string ImageURL { get; set; }
 
         public int Likes { get; set; }
         public int DisLikes { get; set; }
         public int Views { get; set; }
+        public bool IsPopular { get; set; }
 
         public string CreatedBy { get; set; }
         public DateTime CreatedTS { get; set; }
