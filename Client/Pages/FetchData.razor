@@ -1,0 +1,110 @@
+﻿@page "/fetchdata"
+@using DealsMo.Shared
+@inject HttpClient Http
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (forecasts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <TelerikGrid Data=@forecasts
+                 Pageable="true" Groupable="true" Sortable="true"
+                 
+                 >
+        <GridColumns>
+            <GridColumn Field="Date">
+                <Template>
+                    @((context as WeatherForecast).Date.ToString("MMMM dd, yyyy"))
+                </Template>
+            </GridColumn>
+            <GridColumn Field="TemperatureC" Title="Temp. C" />
+            <GridColumn Field="Summary" />
+            <GridCommandColumn Width="300px">
+                <GridCommandButton Command="Save" Icon="save" ShowInEdit="true">Update</GridCommandButton>
+                <GridCommandButton Command="Edit" Icon="edit">Edit</GridCommandButton>
+                <GridCommandButton Command="Delete" Icon="delete">Delete</GridCommandButton>
+                <GridCommandButton Command="Cancel" Icon="cancel" ShowInEdit="true">Cancel</GridCommandButton>
+            </GridCommandColumn>
+        </GridColumns>
+        <GridToolBar>
+            <GridCommandButton Command="Add" Icon="add">Add Forecast</GridCommandButton>
+        </GridToolBar>
+    </TelerikGrid>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <th>Temp. (F)</th>
+                <th>Summary</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in forecasts)
+            {
+                <tr>
+                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.TemperatureC</td>
+                    <td>@forecast.TemperatureF</td>
+                    <td>@forecast.Summary</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private WeatherForecast[] forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        forecasts = await Http.GetJsonAsync<WeatherForecast[]>("WeatherForecast");
+    }
+
+    //public List<WeatherForecast> GridData { get; set; }
+    //    protected override async Task OnInitializedAsync()
+    //{
+    //    await LoadData();
+    //}
+
+    //// sample Read operation
+    //private async Task LoadData()
+    //{
+    //    GridData = await WeatherForecastService.GetForecastAsync();
+    //}
+
+    //// sample CUD operations
+    //public void UpdateHandler(GridCommandEventArgs args)
+    //{
+    //    WeatherForecast item = (WeatherForecast)args.Item;
+    //    var matchingItem = GridData.FirstOrDefault(c => c.Id == item.Id);
+    //    if (matchingItem != null)
+    //    {
+    //        matchingItem.Summary = item.Summary;
+    //        matchingItem.TemperatureC = item.TemperatureC;
+    //        matchingItem.Date = item.Date;
+    //    }
+    //}
+
+    //public void DeleteHandler(GridCommandEventArgs args)
+    //{
+    //    WeatherForecast item = (WeatherForecast)args.Item;
+    //    GridData.Remove(item);
+    //}
+
+    //public void CreateHandler(GridCommandEventArgs args)
+    //{
+    //    WeatherForecast item = (WeatherForecast)args.Item;
+
+    //    item.Id = GridData.Count;
+    //    GridData.Insert(0, item);
+    //}
+
+}
