@@ -5,7 +5,7 @@ using System.Text;
 
 namespace DealsMo.Shared.Entities
 {
-    public class Category
+    public class DealCategory
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "This Category Name is required")]

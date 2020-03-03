@@ -97,7 +97,7 @@ namespace DealsMo.Server.Controllers
 
             var model = new DealDetailsDTO();
             model.Deal = deal;
-            model.Categories = deal.DealsCategories.Select(x => x.Category).OrderBy(x => x.Seq).ToList();
+            model.DealCategories = deal.DealsCategories.Select(x => x.Category).OrderBy(x => x.Seq).ToList();
 
             model.UserVote = uservote;
             model.AverageVote = voteAverage;
@@ -121,11 +121,11 @@ namespace DealsMo.Server.Controllers
                 dealsQueryable = dealsQueryable.Where(x => x.IsPopular);
             }
 
-            if (filterDealsDTO.CategoryId != 0)
+            if (filterDealsDTO.DealCategoryId != 0)
             {
                 dealsQueryable = dealsQueryable
                     .Where(x => x.DealsCategories.Select(y => y.CategoryId)
-                    .Contains(filterDealsDTO.CategoryId));
+                    .Contains(filterDealsDTO.DealCategoryId));
             }
 
             await HttpContext.InsertPaginationParametersInResponse(dealsQueryable,
@@ -145,14 +145,14 @@ namespace DealsMo.Server.Controllers
             if (dealActionResult.Result is NotFoundResult) { return NotFound(); }
 
             var dealDetailDTO = dealActionResult.Value;
-            var selectedCategoriesIds = dealDetailDTO.Categories.Select(x => x.Id).ToList();
-            var notSelectedCategories = await context.Categories
+            var selectedCategoriesIds = dealDetailDTO.DealCategories.Select(x => x.Id).ToList();
+            var notSelectedCategories = await context.DealCategories
                 .Where(x => !selectedCategoriesIds.Contains(x.Id))
                 .ToListAsync();
 
             var model = new DealUpdateDTO();
             model.Deal = dealDetailDTO.Deal;
-            model.SelectedCategories = dealDetailDTO.Categories;
+            model.SelectedCategories = dealDetailDTO.DealCategories;
             model.NotSelectedCategories = notSelectedCategories;
             return model;
         }

@@ -48,10 +48,8 @@ namespace DealsMo.Server
             base.OnModelCreating(modelBuilder);
         }
 
-
-        public DbSet<Category> Categories { get; set; }
         public DbSet<Deal> Deals { get; set; }
-        public DbSet<DealsCategories> DealsCategories { get; set; }
+        public DbSet<DealCategory> DealCategories { get; set; }
         public DbSet<DealRating> DealRating { get; set; }
     }
 }

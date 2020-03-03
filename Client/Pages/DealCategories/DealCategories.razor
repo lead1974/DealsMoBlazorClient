@@ -1,0 +1,77 @@
+﻿@page "/dealcategories"
+@inject IDealCategoryRepository dealCategoriesRepo
+@using DealsMo.Shared
+@inject HttpClient Http
+
+<h3>Deal Categories</h3>
+
+<TelerikGrid Data=@GridData
+             Pageable="true" Groupable="true" Sortable="true"
+             OnUpdate="@UpdateHandler" OnDelete="@DeleteHandler" OnCreate="@CreateHandler">
+    <GridColumns>
+        <GridColumn Field="Seq" />
+        <GridColumn Field="Name" />
+        <GridColumn Field="ShortName" Title="Short Name" />
+        <GridColumn Field="Status" />
+        <GridColumn Field="FAIcon" />
+        <GridColumn Field="IsPrivateCategory" Title="Is Private" />
+        <GridCommandColumn Width="300px">
+            <GridCommandButton Command="Save" Icon="save" ShowInEdit="true">Update</GridCommandButton>
+            <GridCommandButton Command="Edit" Icon="edit">Edit</GridCommandButton>
+            <GridCommandButton Command="Delete" Icon="delete">Delete</GridCommandButton>
+            <GridCommandButton Command="Cancel" Icon="cancel" ShowInEdit="true">Cancel</GridCommandButton>
+        </GridCommandColumn>
+    </GridColumns>
+    <GridToolBar>
+        <GridCommandButton Command="Add" Icon="add">Add Deal Category</GridCommandButton>
+    </GridToolBar>
+</TelerikGrid>
+
+
+@code {
+     public List<DealCategory> GridData { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    // sample Read operation
+    private async Task LoadData()
+    {
+        GridData = await dealCategoriesRepo.GetDealCategories();
+    }
+
+    // sample CUD operations
+    public void UpdateHandler(GridCommandEventArgs args)
+    {
+        DealCategory item = (DealCategory)args.Item;
+        var matchingItem = GridData.FirstOrDefault(c => c.Id == item.Id);
+        if (matchingItem != null)
+        {
+            matchingItem.Name = item.Name;
+            matchingItem.ShortName = item.ShortName;
+            matchingItem.Seq = item.Seq;
+            matchingItem.FAIcon = item.FAIcon;
+            matchingItem.IsPrivateCategory = item.IsPrivateCategory;
+            dealCategoriesRepo.UpdateDealCategory(matchingItem);
+        }
+    }
+
+    public void DeleteHandler(GridCommandEventArgs args)
+    {
+        DealCategory item = (DealCategory)args.Item;
+        GridData.Remove(item);
+        dealCategoriesRepo.DeleteDealCategory(item.Id);
+    }
+
+    public void CreateHandler(GridCommandEventArgs args)
+    {
+        DealCategory item = (DealCategory)args.Item;
+
+        item.Id = GridData.Count;
+        GridData.Insert(0, item);
+        dealCategoriesRepo.CreateDealCategory(item);
+
+    }
+}

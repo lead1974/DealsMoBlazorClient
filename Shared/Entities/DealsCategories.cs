@@ -9,6 +9,6 @@ namespace DealsMo.Shared.Entities
         public int DealId { get; set; }
         public int CategoryId { get; set; }
         public Deal Deal { get; set; }
-        public Category Category { get; set; }
+        public DealCategory Category { get; set; }
     }
 }

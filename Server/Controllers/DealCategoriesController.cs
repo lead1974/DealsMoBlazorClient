@@ -13,32 +13,32 @@ namespace DealsMo.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
-    public class CategoriesController : ControllerBase
+    public class DealCategoriesController : ControllerBase
     {
         private readonly ApplicationDbContext context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public DealCategoriesController(ApplicationDbContext context)
         {
             this.context = context;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Category>>> Get()
+        public async Task<ActionResult<List<DealCategory>>> Get()
         {
-            return await context.Categories.OrderBy(x => x.Name).ToListAsync();
+            return await context.DealCategories.OrderBy(x => x.Name).ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> Get(int id)
+        public async Task<ActionResult<DealCategory>> Get(int id)
         {
-            var genre = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            var genre = await context.DealCategories.FirstOrDefaultAsync(x => x.Id == id);
             if (genre == null) { return NotFound(); }
             return genre;
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Category category)
+        public async Task<ActionResult<int>> Post(DealCategory category)
         {
             context.Add(category);
             await context.SaveChangesAsync();
@@ -46,7 +46,7 @@ namespace DealsMo.Server.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(Category category)
+        public async Task<ActionResult> Put(DealCategory category)
         {
             context.Attach(category).State = EntityState.Modified;
             await context.SaveChangesAsync();
@@ -56,7 +56,7 @@ namespace DealsMo.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var category = await context.Categories.FirstOrDefaultAsync(x => x.Id == id);
+            var category = await context.DealCategories.FirstOrDefaultAsync(x => x.Id == id);
             if (category == null)
             {
                 return NotFound();

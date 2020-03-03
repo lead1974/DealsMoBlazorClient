@@ -13,7 +13,7 @@ namespace DealsMo.Shared.DTOs
             get { return new PaginationDTO() { Page = Page, RecordsPerPage = RecordsPerPage }; }
         }
         public string Title { get; set; }
-        public int CategoryId { get; set; }
+        public int DealCategoryId { get; set; }
         public bool IsPopular { get; set; }
     }
 }

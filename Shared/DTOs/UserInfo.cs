@@ -8,7 +8,7 @@ namespace DealsMo.Shared.DTOs
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public string DealsMoLevel { get; set; }
+        public string UserLevel { get; set; }
 
     }
 }

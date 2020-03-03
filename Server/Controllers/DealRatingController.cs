@@ -14,12 +14,12 @@ namespace DealsMo.Server.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class RatingController: ControllerBase
+    public class DealRatingController: ControllerBase
     {
         private readonly ApplicationDbContext context;
         private readonly UserManager<IdentityUser> userManager;
 
-        public RatingController(ApplicationDbContext context,
+        public DealRatingController(ApplicationDbContext context,
             UserManager<IdentityUser> userManager)
         {
             this.context = context;
