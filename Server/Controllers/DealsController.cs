@@ -16,7 +16,7 @@ namespace DealsMo.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
     public class DealsController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -166,6 +166,11 @@ namespace DealsMo.Server.Controllers
                 deal.ImageURL = await fileStorageService.SaveFile(imageURL, "jpg", containerName);
             }
 
+            deal.CreatedBy = "user";
+            deal.CreatedTS = DateTime.UtcNow;
+            deal.UpdatedBy = "user";
+            deal.UpdatedTS = DateTime.UtcNow;
+
             context.Add(deal);
             await context.SaveChangesAsync();
             return deal.Id;
@@ -190,6 +195,11 @@ namespace DealsMo.Server.Controllers
             await context.Database.ExecuteSqlInterpolatedAsync($"delete from DealsCategory where DealId = {deal.Id}");
 
             dealDB.DealsCategories = deal.DealsCategories;
+            
+            deal.CreatedBy = "user";
+            deal.CreatedTS = DateTime.UtcNow;
+            deal.UpdatedBy = "user";
+            deal.UpdatedTS = DateTime.UtcNow;
 
             await context.SaveChangesAsync();
             return NoContent();

@@ -27,6 +27,7 @@ namespace DealsMo.Client
             services.AddOptions();
             services.AddTransient<IRepository, RepositoryInMemory>();
             services.AddScoped<IHttpService, HttpService>();
+            services.AddScoped<IDealRepository, DealRepository>();
             services.AddScoped<IDealCategoryRepository, DealCategoryRepository>();
             //services.AddScoped<IPersonRepository, PersonRepository>();
             //services.AddScoped<IMoviesRepository, MoviesRepository>();

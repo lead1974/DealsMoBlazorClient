@@ -40,6 +40,10 @@ namespace DealsMo.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post(DealCategory category)
         {
+            category.CreatedBy = "user";
+            category.CreatedTS = DateTime.UtcNow;
+            category.UpdatedBy = "user";
+            category.UpdatedTS = DateTime.UtcNow;
             context.Add(category);
             await context.SaveChangesAsync();
             return category.Id;
@@ -48,6 +52,10 @@ namespace DealsMo.Server.Controllers
         [HttpPut]
         public async Task<ActionResult> Put(DealCategory category)
         {
+            category.CreatedBy = "user";
+            category.CreatedTS = DateTime.UtcNow;
+            category.UpdatedBy = "user";
+            category.UpdatedTS = DateTime.UtcNow;
             context.Attach(category).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();

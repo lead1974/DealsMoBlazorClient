@@ -1,0 +1,28 @@
+﻿@inject IJSRuntime js
+@inject IDealRepository dealsRepo
+
+<div class="deals-container">
+    <GenericList List="Deals">
+        <ElementTemplate Context="deal">
+            <IndividualDeal Deal="deal"
+                             DeleteMovie="DeleteDeal" @key="deal.Id" />
+        </ElementTemplate>
+    </GenericList>
+</div>
+
+@code {
+    [Parameter] public List<Deal> Deals { get; set; }
+
+    private async Task DeleteMovie(Deal deal)
+    {
+        await js.MyFunction("custom message");
+        var confirmed = await js.Confirm($"Are you sure you want to delete {deal.Title}?");
+
+        if (confirmed)
+        {
+            await dealsRepo.DeleteDeal(deal.Id);
+            Deals.Remove(deal);
+
+        }
+    }
+}

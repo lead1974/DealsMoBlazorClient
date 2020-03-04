@@ -36,6 +36,8 @@ namespace DealsMo.Server
 
             services.AddScoped<IFileStorageService, AzureStorageService>();
 
+            services.AddTransient<DMSeedDataService>();
+
             services.AddMvc()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
@@ -47,7 +49,7 @@ namespace DealsMo.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DMSeedDataService seedData)
         {
             app.UseResponseCompression();
 
@@ -67,6 +69,8 @@ namespace DealsMo.Server
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapFallbackToClientSideBlazor<Client.Program>("index.html");
             });
+
+            seedData.EnsureSeedData();
         }
     }
 }

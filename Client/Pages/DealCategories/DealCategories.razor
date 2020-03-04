@@ -1,7 +1,8 @@
 ﻿@page "/dealcategories"
 @inject IDealCategoryRepository dealCategoriesRepo
-@using DealsMo.Shared
 @inject HttpClient Http
+
+@using DealsMo.Shared
 
 <h3>Deal Categories</h3>
 
@@ -29,7 +30,7 @@
 
 
 @code {
-     public List<DealCategory> GridData { get; set; }
+    public List<DealCategory> GridData { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

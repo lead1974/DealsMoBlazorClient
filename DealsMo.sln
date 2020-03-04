@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DealsMo.Server", "Server\DealsMo.Server.csproj", "{E3174A8D-E2B8-4716-883B-342DC64C6D59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DealsMo.Server", "Server\DealsMo.Server.csproj", "{E3174A8D-E2B8-4716-883B-342DC64C6D59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DealsMo.Client", "Client\DealsMo.Client.csproj", "{8DEA1254-F5CB-49CB-B5F8-32F575BB8982}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DealsMo.Client", "Client\DealsMo.Client.csproj", "{8DEA1254-F5CB-49CB-B5F8-32F575BB8982}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DealsMo.Shared", "Shared\DealsMo.Shared.csproj", "{8DB53D0F-DD31-476F-A996-A91ECFD6A0CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DealsMo.Shared", "Shared\DealsMo.Shared.csproj", "{8DB53D0F-DD31-476F-A996-A91ECFD6A0CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

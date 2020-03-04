@@ -24,8 +24,4 @@
     <ProjectReference Include="..\Shared\DealsMo.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
 </Project>

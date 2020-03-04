@@ -1,7 +1,26 @@
 ﻿@page "/"
+@page "/index"
+@inject IDealRepository dealsRepo
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<div>
+    <h3>Popular</h3>
+    <DealsList Deals="PopularDeals" />
+</div>
+
+<div>
+    <h3>Upcoming Deals</h3>
+    <DealsList Deals="UpcomingDeals" />
+</div>
+
+@code{
+    private List<Deal> PopularDeals;
+    private List<Deal> UpcomingDeals;
+    protected async override Task OnInitializedAsync()
+    {
+        var response = await dealsRepo.GetIndexPageDTO();
+        PopularDeals = response.PopularDeals;
+        UpcomingDeals= response.UpcomingDeals;
+    }
+}
