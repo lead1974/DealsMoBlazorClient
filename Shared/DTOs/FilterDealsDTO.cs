@@ -14,6 +14,7 @@ namespace DealsMo.Shared.DTOs
         }
         public string Title { get; set; }
         public int DealCategoryId { get; set; }
-        public bool IsPopular { get; set; }
+        public bool PopularDeals { get; set; }
+        public bool UpcomingDeals { get; set; }
     }
 }

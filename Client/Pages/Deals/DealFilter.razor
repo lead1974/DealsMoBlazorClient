@@ -1,0 +1,156 @@
+﻿@page "/deals/search"
+@inject IDealRepository dealRepo
+@inject IDealCategoryRepository dealCategoryRepo
+@inject NavigationManager navigationManager
+
+<h3>Search Deals</h3>
+
+<EditForm Model="filterDealsDTO">
+    <div class="form-inline">
+        <div class="form-group mb-2">
+            <label for="title" class="sr-only">Title</label>
+            <input type="text" class="form-control" id="title" placeholder="Deal Title"
+                   @bind-value="filterDealsDTO.Title" @bind-value:event="oninput"
+                   @onkeypress="@((KeyboardEventArgs e) => TitleKeyPress(e))" />
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <select class="form-control" @bind="filterDealsDTO.DealCategoryId">
+                <option value="0">
+                    --Select a Category--
+                </option>
+                @foreach (var dealCategory in DealCategories)
+                {
+                    <option value="@dealCategory.Id">@dealCategory.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <input type="checkbox" class="form-check-input" id="upcomingdeals"
+                   @bind="filterDealsDTO.UpcomingDeals" />
+            <label class="form-check-label" for="upcomingDeals">
+                Upcoming Deals
+            </label>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <input type="checkbox" class="form-check-input" id="populardeals"
+                   @bind="filterDealsDTO.PopularDeals" />
+            <label class="form-check-label" for="populardeals">
+                Popular Deals
+            </label>
+        </div>
+
+        <button type="button" class="btn btn-primary mb-2 mx-sm-3" @onclick="SearchForDeals">Filter</button>
+        <button type="button" class="btn btn-danger mb-2" @onclick="Clear">Clear</button>
+    </div>
+</EditForm>
+<DealsList Deals="Deals"></DealsList>
+
+<Pagination CurrentPage="filterDealsDTO.Page" TotalAmountPages="totalAmountPages"
+            SelectedPage="SelectedPage" />
+
+@code {
+    private List<Deal> Deals;
+    private FilterDealsDTO filterDealsDTO = new FilterDealsDTO();
+    private int totalAmountPages;
+    private List<DealCategory> DealCategories = new List<DealCategory>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        var queryStrings = navigationManager.GetQueryStrings(navigationManager.Uri);
+        DealCategories = await dealCategoryRepo.GetDealCategories();
+        if (queryStrings != null)
+        {
+            FillFilterWithQueryStrings(queryStrings);
+        }
+        await LoadDeals();
+    }
+
+    private void FillFilterWithQueryStrings(Dictionary<string, string> queryStrings)
+    {
+        if (queryStrings.ContainsKey("dealCategoryId"))
+        {
+            filterDealsDTO.DealCategoryId = int.Parse(queryStrings["dealCategoryId"]);
+        }
+
+        if (queryStrings.ContainsKey("title"))
+        {
+            filterDealsDTO.Title = queryStrings["title"];
+        }
+
+        if (queryStrings.ContainsKey("populardeals"))
+        {
+            filterDealsDTO.PopularDeals = bool.Parse(queryStrings["populardeals"]);
+        }
+
+        if (queryStrings.ContainsKey("upcomingReleases"))
+        {
+            filterDealsDTO.UpcomingDeals = bool.Parse(queryStrings["upcomingdeals"]);
+        }
+
+        if (queryStrings.ContainsKey("page"))
+        {
+            filterDealsDTO.Page = int.Parse(queryStrings["page"]);
+        }
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        filterDealsDTO.Page = page;
+        await LoadDeals();
+    }
+
+    private async Task LoadDeals()
+    {
+        var queryString = GenerateQueryString();
+        if (!string.IsNullOrWhiteSpace(queryString))
+        {
+            queryString = $"?{queryString}";
+            navigationManager.NavigateTo("deals/search" + queryString);
+        }
+
+        var paginatedResponse = await dealRepo.GetDealsFiltered(filterDealsDTO);
+        Deals = paginatedResponse.Response;
+        totalAmountPages = paginatedResponse.TotalAmountPages;
+    }
+
+    private string GenerateQueryString()
+    {
+        var queryStringsDict = new Dictionary<string, string>();
+        queryStringsDict["genreId"] = filterDealsDTO.DealCategoryId.ToString();
+        queryStringsDict["title"] = filterDealsDTO.Title ?? "";
+        queryStringsDict["intheaters"] = filterDealsDTO.PopularDeals.ToString();
+        queryStringsDict["upcomingReleases"] = filterDealsDTO.UpcomingDeals.ToString();
+        queryStringsDict["page"] = filterDealsDTO.Page.ToString();
+
+        var defaultValue = new List<string>() { "false", "", "0" };
+
+        // genreId=4&title=spider....
+
+        return string.Join("&", queryStringsDict
+            .Where(x => !defaultValue.Contains(x.Value.ToLower()))
+            .Select(x => $"{x.Key}={System.Web.HttpUtility.UrlEncode(x.Value)}").ToArray());
+
+    }
+
+    private async Task SearchForDeals()
+    {
+        await LoadDeals();
+    }
+
+    private async Task Clear()
+    {
+        filterDealsDTO.Title = "";
+        filterDealsDTO.DealCategoryId = 0;
+        filterDealsDTO.PopularDeals = false;
+        filterDealsDTO.UpcomingDeals = false;
+        await LoadDeals();
+    }
+
+    private async Task TitleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SearchForDeals();
+        }
+    }
+}

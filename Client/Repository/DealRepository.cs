@@ -18,24 +18,32 @@ namespace DealsMo.Client.Repository
             this.httpService = httpService;
         }
 
-        public Task<DealDetailsDTO> GetDealDetailsDTO(int id)
+        public async Task<DealDetailsDTO> GetDealDetailsDTO(int id)
         {
-            throw new NotImplementedException();
+            return await httpService.GetHelper<DealDetailsDTO>($"{url}/{id}");
         }
 
-        public Task<DealUpdateDTO> GetDealForUpdate(int id)
+        public async Task<DealUpdateDTO> GetDealForUpdate(int id)
         {
-            throw new NotImplementedException();
+            return await httpService.GetHelper<DealUpdateDTO>($"{url}/update/{id}");
         }
 
-        public Task<PaginatedResponse<List<Deal>>> GetDealsFiltered(FilterDealsDTO filterDealsDTO)
+        public async Task<PaginatedResponse<List<Deal>>> GetDealsFiltered(FilterDealsDTO filterDealsDTO)
         {
-            throw new NotImplementedException();
+            var responseHTTP = await httpService.Post<FilterDealsDTO, List<Deal>>($"{url}/filter", filterDealsDTO);
+            var totalAmountPages = int.Parse(responseHTTP.HttpResponseMessage.Headers.GetValues("totalAmountPages").FirstOrDefault());
+            var paginatedResponse = new PaginatedResponse<List<Deal>>()
+            {
+                Response = responseHTTP.Response,
+                TotalAmountPages = totalAmountPages
+            };
+
+            return paginatedResponse;
         }
 
-        public Task<IndexPageDTO> GetIndexPageDTO()
+        public async Task<IndexPageDTO> GetIndexPageDTO()
         {
-            throw new NotImplementedException();
+            return await httpService.GetHelper<IndexPageDTO>(url);
         }
         
         public async Task<int> CreateDeal(Deal deal)

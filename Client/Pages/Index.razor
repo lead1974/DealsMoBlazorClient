@@ -15,8 +15,8 @@
 </div>
 
 @code{
-    private List<Deal> PopularDeals;
-    private List<Deal> UpcomingDeals;
+    private List<Deal> PopularDeals = new List<Deal>();
+    private List<Deal> UpcomingDeals = new List<Deal>();
     protected async override Task OnInitializedAsync()
     {
         var response = await dealsRepo.GetIndexPageDTO();

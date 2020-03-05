@@ -116,7 +116,7 @@ namespace DealsMo.Server.Controllers
                     .Where(x => x.Title.Contains(filterDealsDTO.Title));
             }
 
-            if (filterDealsDTO.IsPopular)
+            if (filterDealsDTO.PopularDeals)
             {
                 dealsQueryable = dealsQueryable.Where(x => x.IsPopular);
             }
